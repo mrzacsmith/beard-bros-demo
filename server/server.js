@@ -1,5 +1,8 @@
 const express = require('express')
+const colors = require('colors')
 const products = require('./data/products.js')
+
+require('dotenv').config()
 
 const server = express()
 
@@ -19,5 +22,8 @@ server.get('/api/products/:id', (req, res) => {
 const PORT = process.env.PORT || 3555
 
 server.listen(PORT, () => {
-  console.log(`\n** Server is listening on port ${PORT}`)
+  console.log(
+    `\n** Server is in ${process.env.NODE_ENV} mode, listening on port ${PORT}`
+      .rainbow
+  )
 })
