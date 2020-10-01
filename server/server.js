@@ -1,9 +1,12 @@
 const express = require('express')
-const colors = require('colors')
 const products = require('./data/products.js')
 
+const connectDB = require('./config/connectDB.js')
+
+require('colors')
 require('dotenv').config()
 
+connectDB()
 const server = express()
 
 server.get('/', (req, res) => {
