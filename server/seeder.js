@@ -1,5 +1,3 @@
-const mongoose = require('mongoose')
-
 const users = require('./data/users.js')
 const products = require('./data/products.js')
 
