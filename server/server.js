@@ -1,27 +1,39 @@
+require('dotenv').config()
 const express = require('express')
+const morgan = require('morgan')
+const helmet = require('helmet')
+const cors = require('cors')
 
-const connectDB = require('./config/connectDB.js')
-const productsRouter = require('./routes/productsRouter.js')
-const usersRouter = require('./routes/userRouter.js')
+const connectDB = require('./util/db.js')
+const UserRouter = require('./routes/users.js')
 
 require('colors')
-require('dotenv').config()
+
+const server = express()
+server.use(cors())
+server.use(helmet())
+server.use(morgan('dev'))
+server.use(express.json())
 
 connectDB()
-const server = express()
 
-server.use('/api/products', productsRouter)
-server.use('/api/users', usersRouter)
-
-server.get('/', (req, res) => {
-  res.send('API is running')
+let currentTime = new Date().toLocaleString('en-US', {
+  timeZone: 'America/Denver',
 })
 
-const PORT = process.env.PORT || 3555
+server.get('/', (req, res) => {
+  res.status(200).json({
+    status: 200,
+    message: `Server is running on port ${PORT}`,
+    dataTime: currentTime + ' MST',
+    author: 'Github: @MrZacSmith',
+  })
+})
+
+server.use('/api/users', UserRouter)
+
+const PORT = process.env.PORT || 5000
 
 server.listen(PORT, () => {
-  console.log(
-    `\n** Server is in ${process.env.NODE_ENV} mode, listening on port ${PORT}`
-      .rainbow.bold
-  )
+  console.log(`\n** Server is listening on port ${PORT}`.rainbow)
 })
