@@ -4,6 +4,8 @@ const morgan = require('morgan')
 const helmet = require('helmet')
 const cors = require('cors')
 
+const connectDB = require('./util/db.js')
+
 require('colors')
 
 const server = express()
@@ -12,9 +14,18 @@ server.use(helmet())
 server.use(morgan('dev'))
 server.use(express.json())
 
+connectDB()
+
+let currentTime = new Date().toLocaleString('en-US', {
+  timeZone: 'America/Denver',
+})
+
 server.get('/', (req, res) => {
   res.status(200).json({
-    status: 'Success',
+    status: 200,
+    message: `Server is running on port ${PORT}`,
+    dataTime: currentTime + ' MST',
+    author: 'Github: @MrZacSmith',
   })
 })
 
