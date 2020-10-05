@@ -6,6 +6,7 @@ const cors = require('cors')
 
 const connectDB = require('./util/db.js')
 const UserRouter = require('./routes/users.js')
+const ProductRouter = require('./routes/products.js')
 
 require('colors')
 
@@ -31,6 +32,7 @@ server.get('/', (req, res) => {
 })
 
 server.use('/api/users', UserRouter)
+server.use('/api/products', ProductRouter)
 
 const PORT = process.env.PORT || 5000
 
