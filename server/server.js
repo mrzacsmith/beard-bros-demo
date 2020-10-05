@@ -5,6 +5,7 @@ const helmet = require('helmet')
 const cors = require('cors')
 
 const connectDB = require('./util/db.js')
+const UserRouter = require('./routes/users.js')
 
 require('colors')
 
@@ -28,6 +29,8 @@ server.get('/', (req, res) => {
     author: 'Github: @MrZacSmith',
   })
 })
+
+server.use('/api/users', UserRouter)
 
 const PORT = process.env.PORT || 5000
 
