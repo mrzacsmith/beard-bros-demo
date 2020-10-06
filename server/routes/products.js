@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const asyncHandler = require('express-async-handler')
 const Product = require('../models/Products.js')
 
 // @desc    Test end is working
@@ -12,14 +13,32 @@ router.get('/test', (req, res) => {
 
 // @desc    Get all products
 // @route   GET /
-router.get('/', (req, res) => {
-  Product.find(req.query)
-    .then((products) => res.json(products))
-    .catch((err) => res.status(400).json(`Error: ${err}`))
-})
+router.get(
+  '/',
+  asyncHandler(async (req, res) => {
+    // Product.find(req.query)
+    //   .then((products) => res.json(products))
+    //   .catch((err) => res.status(400).json(`Error: ${err}`))
+    const products = await Product.find({})
+
+    res.json(products)
+  })
+)
 
 // @desc    Get a product by id
 // @route   GET /:id
+router.get(
+  '/:id',
+  asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id)
+
+    if (product) {
+      res.json(product)
+    } else {
+      res.status(404).json({ message: 'Product not found' })
+    }
+  })
+)
 
 // @desc    Add a new product
 // @route   POST /
