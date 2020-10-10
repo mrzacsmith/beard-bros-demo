@@ -19,7 +19,7 @@ router.get(
     // Product.find(req.query)
     //   .then((products) => res.json(products))
     //   .catch((err) => res.status(400).json(`Error: ${err}`))
-    const products = await Product.find({})
+    const products = await Product.find(req.query)
 
     res.json(products)
   })

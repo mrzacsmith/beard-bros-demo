@@ -35,9 +35,9 @@ server.get('/', (req, res) => {
 server.use('/api/users', UserRouter)
 server.use('/api/products', ProductRouter)
 
-server.use(notFound)
+// server.use(notFound)
 
-server.use(errorHandler)
+// server.use(errorHandler)
 
 const PORT = process.env.PORT || 5000
 
