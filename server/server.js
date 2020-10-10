@@ -4,6 +4,7 @@ const morgan = require('morgan')
 const helmet = require('helmet')
 const cors = require('cors')
 
+const { notFound, errorHandler } = require('./middleware/error-middleware.js')
 const connectDB = require('./util/db.js')
 const UserRouter = require('./routes/users.js')
 const ProductRouter = require('./routes/products.js')
@@ -33,6 +34,10 @@ server.get('/', (req, res) => {
 
 server.use('/api/users', UserRouter)
 server.use('/api/products', ProductRouter)
+
+server.use(notFound)
+
+server.use(errorHandler)
 
 const PORT = process.env.PORT || 5000
 
