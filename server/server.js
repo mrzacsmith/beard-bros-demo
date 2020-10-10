@@ -1,32 +1,46 @@
+require('dotenv').config()
 const express = require('express')
-const products = require('./data/products.js')
+const morgan = require('morgan')
+const helmet = require('helmet')
+const cors = require('cors')
 
-const connectDB = require('./config/connectDB.js')
+const { notFound, errorHandler } = require('./middleware/error-middleware.js')
+const connectDB = require('./util/db.js')
+const UserRouter = require('./routes/users.js')
+const ProductRouter = require('./routes/products.js')
 
 require('colors')
-require('dotenv').config()
+
+const server = express()
+server.use(cors())
+server.use(helmet())
+server.use(morgan('dev'))
+server.use(express.json())
 
 connectDB()
-const server = express()
+
+let currentTime = new Date().toLocaleString('en-US', {
+  timeZone: 'America/Denver',
+})
 
 server.get('/', (req, res) => {
-  res.send('API is running')
+  res.status(200).json({
+    status: 200,
+    message: `Server is running on port ${PORT}`,
+    dataTime: currentTime + ' MST',
+    author: 'Github: @MrZacSmith',
+  })
 })
 
-server.get('/api/products', (req, res) => {
-  res.json(products)
-})
+server.use('/api/users', UserRouter)
+server.use('/api/products', ProductRouter)
 
-server.get('/api/products/:id', (req, res) => {
-  const product = products.find((p) => p._id === req.params.id)
-  res.json(product)
-})
+server.use(notFound)
 
-const PORT = process.env.PORT || 3555
+server.use(errorHandler)
+
+const PORT = process.env.PORT || 5000
 
 server.listen(PORT, () => {
-  console.log(
-    `\n** Server is in ${process.env.NODE_ENV} mode, listening on port ${PORT}`
-      .rainbow.bold
-  )
+  console.log(`\n** Server is listening on port ${PORT}`.rainbow)
 })
