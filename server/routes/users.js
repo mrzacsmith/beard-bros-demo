@@ -47,8 +47,27 @@ router.post('/', (req, res) => {
 
 // @desc    Update user
 // @route   PATCH /:id
+router.patch('/:id', (req, res) => {
+  User.findByIdAndUpdate(req.params.id)
+    .then((user) => {
+      ;(user.name = req.body.name),
+        (user.email = req.body.email),
+        (user.rpassword = req.body.password),
+        (user.isAdmin = req.body.isAdmin),
+        user
+          .save()
+          .then(() => res.json(`User has been updated`))
+          .catch((err) => res.status(400).json(`Error: $`))
+    })
+    .catch((err) => res.status(400).json(`Error: ${err}`))
+})
 
 // @desc    Remove user by
 // @route   DELETE /:id
+router.delete('/:id', (req, res) => {
+  User.findOneAndDelete(req.params.id)
+    .then(() => res.json('User has been deleted'))
+    .catch((err) => res.status(400).json(`Error: ${err}`))
+})
 
 module.exports = router
